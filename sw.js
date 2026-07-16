@@ -1,4 +1,4 @@
-const CACHE_NAME="jtdb-ipad-pwa-v1";
+const CACHE_NAME="jtdb-ipad-pwa-v2";
 const APP_SHELL=[
   "./",
   "./index.html",
