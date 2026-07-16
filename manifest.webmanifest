@@ -1,0 +1,22 @@
+{
+  "name": "JTDB 外傷レジストリー自動入力",
+  "short_name": "JTDB入力",
+  "description": "患者記録や画像からJTDB入力用JSONを生成し、確認して転記するiPad向けアプリ",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#eef4f7",
+  "theme_color": "#075f86",
+  "lang": "ja",
+  "categories": ["medical", "productivity"],
+  "icons": [
+    {
+      "src": "./icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
