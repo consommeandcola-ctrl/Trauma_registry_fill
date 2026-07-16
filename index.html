@@ -10,7 +10,7 @@
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="apple-touch-icon" href="./icon.png">
   <link rel="icon" type="image/png" href="./icon.png">
-  <script src="./manifest.js" defer></script>
+  <script src="./manifest.js?v=3" defer></script>
   <title>JTDB 外傷レジストリー自動入力 — iPad版</title>
   <style>
     :root{--ink:#143047;--muted:#64798a;--line:#d7e2e9;--blue:#0578a8;--blue2:#19a6c8;--green:#17865b;--amber:#a45d00;--red:#b53838;--paper:#fff;--bg:#eef4f7}
@@ -44,6 +44,9 @@
     .ipad-workspace>.card{margin:0}
     .ipad-tip{background:#eaf8fc;border:1px solid #9ed5e6;border-radius:10px;padding:11px 13px;margin:0 0 18px;color:#164b63}
     .ipad-tip strong{display:block;margin-bottom:2px}
+    .update-row{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;margin-top:9px}
+    .update-row button{min-height:44px;padding:8px 14px}
+    .update-row .status{flex:1 1 240px;margin:0;font-size:13px}
     .toolbar>*{flex:1 1 190px}
     details summary{min-height:44px;display:flex;align-items:center;touch-action:manipulation}
     .ipad-dock{position:fixed;z-index:1000;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:10px max(12px,env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));background:#ffffffee;border-top:1px solid #bdced8;box-shadow:0 -8px 25px #14304722;-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
@@ -61,7 +64,7 @@
 <header><div><h1>JTDB 外傷レジストリー自動入力</h1><p>iPad版・患者記録／写真 → 構造化JSON → 確認 → レジストリー転記</p></div></header>
 <main>
   <div class="notice"><strong>検証用です。</strong> AIの結果は必ず原資料と照合してください。ブックマークレットはフォームへ転記するだけで、登録・保存操作は行いません。実患者情報を外部AIへ送る前に院内規定を確認してください。</div>
-  <div class="ipad-tip"><strong>iPad Safari向け画面</strong>縦向き・横向き・Split Viewに対応します。患者本文と画像は端末内へ保存せず、「症例をリセット」で次症例へ切り替えます。</div>
+  <div class="ipad-tip"><strong>iPad Safari向け画面</strong>縦向き・横向き・Split Viewに対応します。患者本文と画像は端末内へ保存せず、「症例をリセット」で次症例へ切り替えます。<div class="update-row"><button type="button" class="secondary" id="updateAppBtn">アプリを最新版に更新</button><span class="status" id="updateStatus" role="status" aria-live="polite"></span></div></div>
   <div class="steps"><div class="step active">1. 原資料</div><div class="step">2. JSON</div><div class="step">3. コピー</div><div class="step">4. 自動入力</div></div>
 
   <div class="ipad-workspace">

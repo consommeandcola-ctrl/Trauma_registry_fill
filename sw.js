@@ -1,10 +1,10 @@
-const CACHE_NAME="jtdb-ipad-pwa-v2";
+const CACHE_NAME="jtdb-ipad-pwa-v3";
 const APP_SHELL=[
   "./",
   "./index.html",
   "./trauma_registry_autofill_ipad.html",
   "./manifest.webmanifest",
-  "./manifest.js",
+  "./manifest.js?v=3",
   "./icon.png"
 ];
 
@@ -14,6 +14,10 @@ self.addEventListener("install",event=>{
 
 self.addEventListener("activate",event=>{
   event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE_NAME).map(key=>caches.delete(key)))).then(()=>self.clients.claim()));
+});
+
+self.addEventListener("message",event=>{
+  if(event.data&&event.data.type==="SKIP_WAITING")self.skipWaiting();
 });
 
 self.addEventListener("fetch",event=>{
