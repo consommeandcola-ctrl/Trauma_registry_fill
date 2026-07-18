@@ -73,8 +73,7 @@
     <h2>1. 原資料を用意</h2><p class="lead">匿名化した患者記録を貼り付けます。Trauma Lensで確定済みのAIS・FCI記載はAIに再推測させず、そのまま構造化します。</p>
     <div class="field"><label for="clinicalText">匿名化したカルテ・救急隊記録</label><textarea id="clinicalText" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="受傷機転、搬送、来院時バイタル、検査、輸血、処置、手術情報を貼り付けます。"></textarea></div>
     <div class="drop"><div class="field" style="margin:0"><label for="clinicalImages">画像・PDF書類（任意、複数選択可）</label><input id="clinicalImages" type="file" accept="image/*,application/pdf,.pdf" multiple><div class="material-actions"><button type="button" class="secondary" id="confirmMaterialsBtn" disabled>資料を確定（サイズ調整）</button><button type="button" class="secondary" id="editMaterialsBtn" hidden>選択を変更</button></div><small id="imageStatus">写真を選ぶと端末内だけでプレビューします。確認後に「資料を確定」を押してください。</small><div id="materialPreview" class="material-grid" aria-live="polite"></div></div></div>
-    <div class="toolbar"><button class="secondary" id="parseAisBtn">AIS・FCI記載を読み取る</button><button type="button" class="danger" id="resetCaseBtn">症例をリセット</button></div>
-    <div class="status" id="aisParseStatus" aria-live="polite"></div>
+    <div class="toolbar"><button type="button" class="danger" id="resetCaseBtn">症例をリセット</button></div>
   </section>
 
   <section class="card ai-card" id="aiSection">
@@ -370,10 +369,9 @@ async function copyTextForIPad(value){const text=String(value??"");if(window.isS
 function downloadJsonFile(){const data=parseJson();validateData(data);const json=JSON.stringify(data,null,2),blob=new Blob([json],{type:"application/json;charset=utf-8"}),url=URL.createObjectURL(blob),link=document.createElement("a"),stamp=new Date().toISOString().replace(/[:.]/g,"-");link.href=url;link.download="jtdb-case-"+stamp+".json";document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);setStatus("jsonStatus","JSONファイルを保存しました。Safariのダウンロードから「ファイル」へ移動できます。","ok")}
 function resetCase(){
   revokeMaterialUrls();selectedMaterials=[];confirmedMaterials=[];materialsConfirmed=false;$("clinicalText").value="";$("clinicalImages").value="";renderMaterialPreview();updateMaterialStatus("画像・PDFは選択されていません。写真を選ぶと端末内だけでプレビューします。");$("jsonOutput").value="";$("preview").innerHTML="";$("analysisLog").textContent="待機中";
-  for(const id of ["aisParseStatus","aiStatus","jsonStatus"]){const el=$(id);el.textContent="";el.className="status"}
+  for(const id of ["aiStatus","jsonStatus"]){const el=$(id);el.textContent="";el.className="status"}
   document.querySelectorAll(".step").forEach((el,index)=>el.classList.toggle("active",index===0));$("sourceSection")?.scrollIntoView({behavior:"smooth",block:"start"})
 }
-$("parseAisBtn").onclick=()=>{try{const text=$("clinicalText").value.trim();if(!text)throw new Error("患者記録を貼り付けてください");let data;try{data=parseJson()}catch{data=clone(OUTPUT_SCHEMA_EXAMPLE)}const p=mergeAisFromText(data,text);showJson(data,`AIS・FCIを${p.injuries.length}件読み取りました`);setStatus("aisParseStatus",p.injuries.length?`AIS・FCI ${p.injuries.length}件をJSONへ反映しました${p.warnings.length?`（要確認 ${p.warnings.length}件）`:""}`:"所定形式のAIS・FCI記載が見つかりませんでした",p.injuries.length?"ok":"warn")}catch(e){setStatus("aisParseStatus",e.message,"error")}};
 $("fetchModelsBtn").onclick=fetchAvailableModels;$("apiKey").onchange=saveAiSettings;$("modelName").onchange=saveAiSettings;$("customModelName").onchange=saveAiSettings;$("clearAiSettingsBtn").onclick=clearAiSettings;$("aiBtn").onclick=async()=>{saveAiSettings();await analyzeWithGemini()};$("validateBtn").onclick=()=>{try{const d=parseJson();validateData(d);renderPreview(d);setStatus("jsonStatus","JSON形式と主要な選択値は正常です。","ok")}catch(e){setStatus("jsonStatus",e.message,"error")}};
 $("copyBtn").onclick=async()=>{try{const d=parseJson();validateData(d);const json=JSON.stringify(d,null,2),copied=await copyTextForIPad(json);if(!copied){prompt("JSONを長押ししてコピーしてください",json);setStatus("jsonStatus","自動コピーできないため、表示されたJSONを長押ししてコピーしてください。","warn");return}document.querySelectorAll(".step")[2].classList.add("active");setStatus("jsonStatus","JSONをクリップボードへコピーしました。","ok")}catch(e){setStatus("jsonStatus",e.message,"error")}};
 $("downloadBtn").onclick=()=>{try{downloadJsonFile()}catch(e){setStatus("jsonStatus",e.message,"error")}};
