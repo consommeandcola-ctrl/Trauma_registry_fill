@@ -6,3 +6,4 @@ https://consommeandcola-ctrl.github.io/Trauma_registry_fill/
 
 ![iPad版PWAを開くQRコード](./trauma_registry_qr.png)
 
+Gemini呼び出しはGoogle Cloud Agent Platform API（Vertex AI Express Mode）を使用します。APIキーは利用者が画面で入力し、ブラウザのlocalStorageだけに保存されます。
