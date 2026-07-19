@@ -301,7 +301,7 @@ ${catalog}
   try{
     const prepared=await confirmedMaterialsToParts(),parts=[{text:text||"添付された画像またはPDF書類を解析してください。"},...prepared.parts];
     if(files.length)appendAnalysisLog(`添付準備完了: 画像${prepared.imageCount}枚 / PDF${prepared.pdfCount}件（直接送信 ${(prepared.inlineBytes/1048576).toFixed(2)}MB）`);
-    const requestTimeout=prepared.pdfCount?240000:120000,url=`https://aiplatform.googleapis.com/v1/publishers/google/models/${encodeURIComponent(model)}:generateContent`,call=body=>fetchJsonWithTimeout(url,{method:"POST",headers:{"Content-Type":"application/json","x-goog-api-key":key},body:JSON.stringify(body)},requestTimeout),base={contents:[{parts}],systemInstruction:{parts:[{text:instruction}]}};
+    const requestTimeout=prepared.pdfCount?240000:120000,url=`https://aiplatform.googleapis.com/v1/publishers/google/models/${encodeURIComponent(model)}:generateContent`,call=body=>fetchJsonWithTimeout(url,{method:"POST",headers:{"Content-Type":"application/json","x-goog-api-key":key},body:JSON.stringify(body)},requestTimeout),base={contents:[{role:"user",parts}],systemInstruction:{parts:[{text:instruction}]}};
     let data;
     try{
       appendAnalysisLog("主要項目 第1試行: 専用JSON Schema指定（出力上限32768）");
